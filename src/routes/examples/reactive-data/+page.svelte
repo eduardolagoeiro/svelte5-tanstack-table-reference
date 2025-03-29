@@ -59,15 +59,24 @@
     <button onclick={() => shuffleArray()}>Shuffle the Table</button>
 </div>
 
-<h2>Horizontal list with flip animation</h2>
+<h2>Working with flip animation</h2>
 
 <hr />
 
-<div style="display: flex; flex-direction: row; gap: 10px">
-    {#each dataState as item (item.id)}
-        <div style="text-wrap: nowrap" animate:flip>{item.name}</div>
-    {/each}
-</div>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {#each dataState as item (item.id)}
+            <tr animate:flip>
+                <td>{item.name}</td>
+            </tr>
+        {/each}
+    </tbody>
+</table>
 
 <h2>Table Demo</h2>
 
