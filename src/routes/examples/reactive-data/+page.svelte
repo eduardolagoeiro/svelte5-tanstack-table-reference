@@ -2,6 +2,7 @@
     import { UserProfileService, type UserProfile } from '$lib/services/user-profile';
     import FlexRender from '$lib/table/flex-render.svelte';
     import { createColumnHelper, createSvelteTable, getCoreRowModel } from '$lib/table/index';
+    import { flip } from 'svelte/animate';
     import type { PageData } from './$types';
 
     let { data }: PageProps<PageData> = $props();
@@ -40,6 +41,14 @@
         // The data object needs to be reassigned
         dataState = dataState.slice(0, dataState.length - 1);
     }
+
+    function shuffleArray<T>() {
+        for (let i = dataState.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [dataState[i], dataState[j]] = [dataState[j], dataState[i]];
+        }
+        dataState = [...dataState];
+    }
 </script>
 
 <div class="actions-wrapper">
@@ -47,6 +56,17 @@
     <hr />
     <button onclick={() => prependRecord()}> Prepend a Record </button>
     <button onclick={() => popRecord()}> Pop a Record </button>
+    <button onclick={() => shuffleArray()}>Shuffle the Table</button>
+</div>
+
+<h2>Horizontal list with flip animation</h2>
+
+<hr />
+
+<div style="display: flex; flex-direction: row; gap: 10px">
+    {#each dataState as item (item.id)}
+        <div style="text-wrap: nowrap" animate:flip>{item.name}</div>
+    {/each}
 </div>
 
 <h2>Table Demo</h2>
@@ -69,8 +89,8 @@
         </tr>
     </thead>
     <tbody>
-        {#each table.getRowModel().rows as row}
-            <tr>
+        {#each table.getRowModel().rows as row (row.id)}
+            <tr animate:flip>
                 {#each row.getVisibleCells() as cell}
                     <td>
                         <FlexRender
